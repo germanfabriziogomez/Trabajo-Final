@@ -40,7 +40,7 @@ const Home = () => {
       setProducts([])
     }
   }
-  
+
   //FUNCIONALIDAD AGREGADA
   useEffect(() => {
     fetchingProductsByName()
@@ -59,6 +59,9 @@ const Home = () => {
       const dataProducts = await response.json()
 
       setProducts(dataProducts.data)
+      if (dataProducts.data.length === 0) {
+        setError("No hay productos para mostrar")
+      }
     } catch (error) {
       setError(error.message)
     }
@@ -97,15 +100,21 @@ const Home = () => {
   return (
     <Layout>
       {user && <p>Bienvenido, {user.email}</p>}
-      <h1>Lista de productos</h1>
-      <div className="search-bar">
-        <input
-          type="text"
-          placeholder="Busca un producto"
-          onChange={(e) => { setInputSearchProduct(e.target.value) }}
-          value={inputSearchProduct}
-        />
-      </div>
+
+      {error !== "No hay productos para mostrar" && (
+        <>
+          <h1>Lista de productos</h1>
+          <div className="search-bar">
+
+            <input
+              type="text"
+              placeholder="Busca un producto"
+              onChange={(e) => { setInputSearchProduct(e.target.value) }}
+              value={inputSearchProduct}
+            />
+          </div></>)
+      }
+
       {error && <>
         <div className="error-home">
           <h2>{error}</h2>
